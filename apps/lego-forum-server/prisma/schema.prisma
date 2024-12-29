@@ -1,0 +1,50 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Comment {
+  createdAt   DateTime     @default(now())
+  discussions Discussion[]
+  id          String       @id @default(cuid())
+  posts       Post[]
+  updatedAt   DateTime     @updatedAt
+}
+
+model Post {
+  author    String?
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  title     String?
+  updatedAt DateTime @updatedAt
+}
+
+model Discussion {
+  author    String?
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  title     String?
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  createdAt DateTime @default(now())
+  email     String?  @unique
+  firstName String?
+  id        String   @id @default(cuid())
+  lastName  String?
+  password  String
+  roles     Json
+  updatedAt DateTime @updatedAt
+  username  String   @unique
+}
